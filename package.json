@@ -1,0 +1,26 @@
+{
+  "name": "toys",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "libs/*"
+  ],
+  "scripts": {
+    "build": "turbo build",
+    "format:fix": "prettier --write .",
+    "syncpack:fix": "syncpack fix-mismatches",
+    "test": "turbo test",
+    "postinstall": "husky install"
+  },
+  "packageManager": "yarn@3.6.4",
+  "devDependencies": {
+    "husky": "^8.0.3",
+    "lint-staged": "^15.0.2",
+    "prettier": "^3.0.3",
+    "syncpack": "^11.2.1",
+    "turbo": "^1.10.16"
+  },
+  "lint-staged": {
+    "*.{ts,tsx,json,js,html}": "prettier --write"
+  }
+}

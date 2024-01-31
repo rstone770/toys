@@ -1,0 +1,7 @@
+{
+  "name": "@toys/tsconfig",
+  "version": "0.0.0",
+  "dependencies": {
+    "@tsconfig/recommended": "^1.0.3"
+  }
+}
