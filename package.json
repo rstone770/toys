@@ -2,7 +2,7 @@
   "name": "toys",
   "private": true,
   "workspaces": [
-    "apps/*",
+    "toys/*",
     "libs/*"
   ],
   "scripts": {
@@ -12,7 +12,7 @@
     "test": "turbo test",
     "postinstall": "husky install"
   },
-  "packageManager": "yarn@3.6.4",
+  "packageManager": "yarn@4.1.0",
   "devDependencies": {
     "husky": "^8.0.3",
     "lint-staged": "^15.0.2",
