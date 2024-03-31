@@ -224,6 +224,14 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@rstone770/acd2js@workspace:toys/acd2js":
+  version: 0.0.0-use.local
+  resolution: "@rstone770/acd2js@workspace:toys/acd2js"
+  dependencies:
+    "@toys/tsconfig": "npm:0.0.0"
+  languageName: unknown
+  linkType: soft
+
 "@toys/esbuild@workspace:libs/esbuild":
   version: 0.0.0-use.local
   resolution: "@toys/esbuild@workspace:libs/esbuild"
@@ -233,7 +241,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@toys/tsconfig@workspace:libs/tsconfig":
+"@toys/tsconfig@npm:0.0.0, @toys/tsconfig@workspace:libs/tsconfig":
   version: 0.0.0-use.local
   resolution: "@toys/tsconfig@workspace:libs/tsconfig"
   dependencies:

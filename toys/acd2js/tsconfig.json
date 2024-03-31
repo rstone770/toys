@@ -1,0 +1,17 @@
+{
+  "extends": "@toys/tsconfig",
+  "compilerOptions": {
+    "rootDir": "./src",
+    "lib": ["ES2020"]
+  },
+  "files": [],
+  "include": [],
+  "references": [
+    {
+      "path": "./tsconfig.app.json"
+    },
+    {
+      "path": "./tsconfig.spec.json"
+    }
+  ]
+}

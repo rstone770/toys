@@ -1,0 +1,8 @@
+{
+  "name": "@rstone770/acd2js",
+  "version": "0.0.0",
+  "description": "Converts ACD files to JSON and sprite sheets",
+  "devDependencies": {
+    "@toys/tsconfig": "0.0.0"
+  }
+}
