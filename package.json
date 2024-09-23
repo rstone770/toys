@@ -12,13 +12,13 @@
     "test": "turbo test",
     "postinstall": "husky install"
   },
-  "packageManager": "yarn@4.1.0",
+  "packageManager": "yarn@4.5.0",
   "devDependencies": {
-    "husky": "^9.0.11",
-    "lint-staged": "^15.2.2",
-    "prettier": "^3.2.5",
-    "syncpack": "^12.3.0",
-    "turbo": "^1.12.4"
+    "husky": "^9.1.6",
+    "lint-staged": "^15.2.10",
+    "prettier": "^3.3.3",
+    "syncpack": "^13.0.0",
+    "turbo": "^2.1.2"
   },
   "lint-staged": {
     "*.{ts,tsx,json,js,html}": "prettier --write"
