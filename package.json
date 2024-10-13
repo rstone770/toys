@@ -6,10 +6,10 @@
     "libs/*"
   ],
   "scripts": {
-    "build": "turbo build",
-    "format:fix": "prettier --write .",
+    "build": "turbo run build",
+    "format": "prettier --write .",
     "syncpack:fix": "syncpack fix-mismatches",
-    "test": "turbo test",
+    "test": "turbo run test",
     "postinstall": "husky install"
   },
   "packageManager": "yarn@4.5.0",
@@ -18,9 +18,12 @@
     "lint-staged": "^15.2.10",
     "prettier": "^3.3.3",
     "syncpack": "^13.0.0",
-    "turbo": "^2.1.2"
+    "turbo": "^2.1.3"
   },
   "lint-staged": {
-    "*.{ts,tsx,json,js,html}": "prettier --write"
+    "*.{ts,tsx,json,js,html,md}": "prettier --write"
+  },
+  "engines": {
+    "node": ">=18.x <=22.x"
   }
 }
