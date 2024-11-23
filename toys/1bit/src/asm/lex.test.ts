@@ -1,5 +1,5 @@
 import { expect, test } from "vitest";
-import { lex, Token } from "./lex";
+import { lex } from "./lex";
 
 test("returns null for empty input", () => {
   expect(lex("", 0)).toBeNull();
