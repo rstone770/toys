@@ -18,7 +18,7 @@
     "lint-staged": "^15.2.10",
     "prettier": "^3.3.3",
     "syncpack": "^13.0.0",
-    "turbo": "^2.1.3"
+    "turbo": "^2.3.1"
   },
   "lint-staged": {
     "*.{ts,tsx,json,js,html,md}": "prettier --write"

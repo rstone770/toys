@@ -5,10 +5,12 @@
   "type": "module",
   "scripts": {
     "start": "vite",
-    "build": "vite build"
+    "build": "vite build",
+    "test": "vitest"
   },
   "devDependencies": {
-    "vite": "^5.4.8",
-    "@types/node": "^22.7.5"
+    "@types/node": "^22.7.5",
+    "vite": "^5.4.11",
+    "vitest": "^2.1.5"
   }
 }
