@@ -1,4 +1,4 @@
-import { SemanticTokenType, Token, TokenOfType, TriviaTokenType } from "./tokens";
+import { Token, TokenOfType, TriviaTokenType, SemanticTokenType } from "./tokens";
 
 export const lex = (input: string, offset: number): Token | null => {
   if (offset < 0) {

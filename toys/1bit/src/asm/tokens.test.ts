@@ -4,7 +4,6 @@ import {
   isTriviaToken,
   AnyToken,
   TriviaTokenType,
-  SemanticToken,
   SemanticTokenType
 } from "./tokens";
 
