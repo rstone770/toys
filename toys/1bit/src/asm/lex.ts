@@ -1,11 +1,4 @@
-export type TokenType = "comment" | "identifier" | "number" | "keyword" | "ws";
-
-export interface Token {
-  type: TokenType;
-  value: string;
-  offset: number;
-  length: number;
-}
+import { SemanticTokenType, Token, TokenOfType, TriviaTokenType } from "./tokens";
 
 export const lex = (input: string, offset: number): Token | null => {
   if (offset < 0) {
@@ -26,15 +19,15 @@ export const lex = (input: string, offset: number): Token | null => {
   return token;
 };
 
-const match = (
-  type: TokenType,
+const match = <Type extends string>(
+  type: Type,
   pattern: RegExp,
   map?: (match: RegExpMatchArray) => string | null
 ) => {
   const flags = pattern.ignoreCase ? "yi" : "y";
   const exp = new RegExp(pattern, flags);
 
-  return (input: string, offset: number): Token | null => {
+  return (input: string, offset: number): TokenOfType<Type> | null => {
     exp.lastIndex = offset;
 
     const match = exp.exec(input);
@@ -56,8 +49,8 @@ const match = (
   };
 };
 
-const identifier = match("identifier", /[A-Z_][A-Z0-9_]*/i);
-const number = match("number", /0x[0-9A-F]+|0b[01]+|[0-9]+/i);
-const keyword = match("keyword", /EQU/i);
-const comment = match("comment", /;(.*)/, (match) => match[1]);
-const whitespace = match("ws", /\s+/);
+const identifier = match<SemanticTokenType>("identifier", /[A-Z_][A-Z0-9_]*/i);
+const number = match<SemanticTokenType>("number", /0x[0-9A-F]+|0b[01]+|[0-9]+/i);
+const keyword = match<SemanticTokenType>("keyword", /EQU/i);
+const comment = match<TriviaTokenType>("comment", /;(.*)/, (match) => match[1]);
+const whitespace = match<TriviaTokenType>("ws", /\s+/);
