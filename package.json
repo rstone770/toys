@@ -12,7 +12,7 @@
     "test": "turbo test",
     "postinstall": "husky install"
   },
-  "packageManager": "yarn@4.5.0",
+  "packageManager": "yarn@4.5.3",
   "devDependencies": {
     "husky": "^9.1.6",
     "lint-staged": "^15.2.10",
