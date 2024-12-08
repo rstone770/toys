@@ -1,6 +1,5 @@
 import { tryCycleTile } from "./_tryCycleTile";
 import { tryOpenTile } from "./_tryOpenTile";
-import { tryPopulateField } from "./_tryPopulateField";
 import { FieldState, FieldTilesUpdated, FieldTileUpdated } from "./types";
 
 export interface FieldEvents {
@@ -25,11 +24,6 @@ export class Field {
   }
 
   public open(x: number, y: number): void {
-    const populated = tryPopulateField(this.state, x, y);
-    if (populated != null) {
-      this.events.onTilesUpdated(populated);
-    }
-
     const opened = tryOpenTile(this.state, x, y);
     if (opened != null) {
       this.events.onTilesUpdated(opened);
