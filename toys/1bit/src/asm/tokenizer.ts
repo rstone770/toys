@@ -10,7 +10,6 @@ export type AnyToken = Token<string, unknown>;
 export type StringToken<Type extends string> = Token<Type, string>;
 
 export type Tokenize<T extends AnyToken> = (input: string, offset?: number) => T | null;
-
 export type IsTokenType<T extends AnyToken> = (token: AnyToken) => token is T;
 export type Tokenizer<T extends AnyToken> = [Tokenize<T>, IsTokenType<T>];
 export type TokenizerReturnType<T extends Tokenize<AnyToken>> = NonNullable<ReturnType<T>>;

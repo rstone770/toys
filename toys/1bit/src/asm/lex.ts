@@ -1,4 +1,4 @@
-import { AnyToken, Token, regex, TokenizerReturnType, IsTokenType } from "./tokenizer";
+import { AnyToken, Token, regex, TokenizerReturnType } from "./tokenizer";
 
 export const [whitespace, isWhitespace] = regex("ws", /[ \t]+/);
 export const [endOfLine, isEndOfLine] = regex("eol", /\r?\n/);
@@ -7,9 +7,9 @@ export const [identifier, isIdentifier] = regex("identifier", /[A-Z_][A-Z0-9_]*/
   match[0].toLowerCase()
 );
 
-export type EndOfStream = Token<"eos", null>;
-export const isEndOfStream = (token: AnyToken): token is EndOfStream => token.type === "eos";
-export const endOfStream = (input: string, offset: number): EndOfStream | null => {
+export type EndOfStreamToken = Token<"eos", null>;
+export const isEndOfStream = (token: AnyToken): token is EndOfStreamToken => token.type === "eos";
+export const endOfStream = (input: string, offset: number): EndOfStreamToken | null => {
   if (offset >= input.length) {
     return {
       type: "eos",
@@ -65,28 +65,26 @@ export type NumericToken = TokenizerReturnType<typeof numeric>;
 export type EquToken = TokenizerReturnType<typeof equ>;
 
 export type KnownToken =
-  | WhitespaceToken
+  | EndOfStreamToken
   | EndOfLineToken
   | CommentToken
-  | IdentifierToken
+  | WhitespaceToken
+  | EquToken
   | NumericToken
-  | EquToken;
+  | IdentifierToken;
 
 export const lex = (input: string, offset = 0): KnownToken | null => {
-  if (offset >= input.length) {
-    return null;
-  }
-
   if (offset < 0) {
     return null;
   }
 
   return (
-    whitespace(input, offset) ??
+    endOfStream(input, offset) ??
     endOfLine(input, offset) ??
     comment(input, offset) ??
-    numeric(input, offset) ??
+    whitespace(input, offset) ??
     equ(input, offset) ??
+    numeric(input, offset) ??
     identifier(input, offset)
   );
 };
