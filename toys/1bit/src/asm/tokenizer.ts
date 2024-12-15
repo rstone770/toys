@@ -7,36 +7,36 @@ export interface Token<Type extends string, Value> {
 }
 
 export type AnyToken = Token<string, unknown>;
+export type StringToken<Type extends string> = Token<Type, string>;
 
-export type Tokenizer<Type extends string, Value> = (
-  input: string,
-  offset?: number
-) => Token<Type, Value> | null;
+export type Tokenize<T extends AnyToken> = (input: string, offset?: number) => T | null;
 
-export type TokenizerFactory = {
+export type IsTokenType<T extends AnyToken> = (token: AnyToken) => token is T;
+export type Tokenizer<T extends AnyToken> = [Tokenize<T>, IsTokenType<T>];
+export type TokenizerReturnType<T extends Tokenize<AnyToken>> = NonNullable<ReturnType<T>>;
+
+export type CreateRegexTokenizer = {
   <Type extends string, Value>(
     type: Type,
     pattern: RegExp,
     map: (match: RegExpMatchArray) => Value | null
-  ): Tokenizer<Type, Value>;
+  ): Tokenizer<Token<Type, Value>>;
   <Type extends string>(
     type: Type,
     pattern: RegExp,
     map?: (match: RegExpMatchArray) => string | null
-  ): Tokenizer<Type, string>;
+  ): Tokenizer<StringToken<Type>>;
 };
 
-export type TokenizerReturnType<T extends Tokenizer<string, unknown>> = NonNullable<ReturnType<T>>;
-
-export const tokenizer: TokenizerFactory = <Type extends string, Value>(
+export const regex: CreateRegexTokenizer = <Type extends string, Value>(
   type: Type,
   pattern: RegExp,
   map?: (match: RegExpMatchArray) => Value | null
-): Tokenizer<Type, Value> => {
+): Tokenizer<Token<Type, Value>> => {
   const flags = pattern.ignoreCase ? "yi" : "y";
   const exp = new RegExp(pattern, flags);
 
-  return (input: string, offset: number = 0) => {
+  const tokenize = (input: string, offset: number = 0): Token<Type, Value> | null => {
     exp.lastIndex = offset;
 
     const match = exp.exec(input);
@@ -55,4 +55,22 @@ export const tokenizer: TokenizerFactory = <Type extends string, Value>(
       range: [offset, offset + match[0].length]
     };
   };
+
+  const isTokenType = (token): token is Token<Type, Value> => {
+    return token.type === type;
+  };
+
+  return [tokenize, isTokenType];
+};
+
+export const next = <T extends AnyToken>(
+  tokenizer: (input: string, offset: number) => T | null,
+  input: string,
+  current: T | null
+): T | null => {
+  if (current == null) {
+    return null;
+  }
+
+  return tokenizer(input, current.range[1]);
 };

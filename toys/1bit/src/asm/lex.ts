@@ -1,17 +1,32 @@
-import { tokenizer, TokenizerReturnType } from "./tokenizer";
+import { AnyToken, Token, regex, TokenizerReturnType, IsTokenType } from "./tokenizer";
 
-export const whitespace = tokenizer("ws", /\s+/);
-export const comment = tokenizer("comment", /;(.*)/, (match) => match[1]);
-export const identifier = tokenizer("identifier", /[A-Z_][A-Z0-9_]*/i, (match) =>
+export const [whitespace, isWhitespace] = regex("ws", /[ \t]+/);
+export const [endOfLine, isEndOfLine] = regex("eol", /\r?\n/);
+export const [comment, isComment] = regex("comment", /;(.*)/, (match) => match[1]);
+export const [identifier, isIdentifier] = regex("identifier", /[A-Z_][A-Z0-9_]*/i, (match) =>
   match[0].toLowerCase()
 );
+
+export type EndOfStream = Token<"eos", null>;
+export const isEndOfStream = (token: AnyToken): token is EndOfStream => token.type === "eos";
+export const endOfStream = (input: string, offset: number): EndOfStream | null => {
+  if (offset >= input.length) {
+    return {
+      type: "eos",
+      value: null,
+      range: [input.length, input.length]
+    };
+  }
+
+  return null;
+};
 
 export type NumberFormat = "dec" | "hex" | "bin";
 export interface Numeric {
   value: number;
   format: NumberFormat;
 }
-export const numeric = tokenizer(
+export const [numeric, isNumeric] = regex(
   "numeric",
   /0x(?<hex>[0-9A-F]+)|0b(?<bin>[01]+)|[0-9]+/,
   (match): Numeric => {
@@ -36,25 +51,26 @@ export const numeric = tokenizer(
   }
 );
 
-export type KeywordType = "equ";
-export const keyword = tokenizer(
-  "keyword",
-  /EQU/i,
-  (match): KeywordType => match[0].toLowerCase() as KeywordType
-);
+export const [equ, isEqu] = regex("equ", /EQU/i, (match) => match[0].toLowerCase());
+
+export const isParam = (token: AnyToken) => isIdentifier(token) || isNumeric(token);
+export const isEndOfStatement = (token: AnyToken) =>
+  isEndOfStream(token) || isEndOfLine(token) || isComment(token);
 
 export type WhitespaceToken = TokenizerReturnType<typeof whitespace>;
+export type EndOfLineToken = TokenizerReturnType<typeof endOfLine>;
 export type CommentToken = TokenizerReturnType<typeof comment>;
 export type IdentifierToken = TokenizerReturnType<typeof identifier>;
 export type NumericToken = TokenizerReturnType<typeof numeric>;
-export type KeywordToken = TokenizerReturnType<typeof keyword>;
+export type EquToken = TokenizerReturnType<typeof equ>;
 
 export type KnownToken =
   | WhitespaceToken
+  | EndOfLineToken
   | CommentToken
   | IdentifierToken
   | NumericToken
-  | KeywordToken;
+  | EquToken;
 
 export const lex = (input: string, offset = 0): KnownToken | null => {
   if (offset >= input.length) {
@@ -67,9 +83,10 @@ export const lex = (input: string, offset = 0): KnownToken | null => {
 
   return (
     whitespace(input, offset) ??
+    endOfLine(input, offset) ??
     comment(input, offset) ??
     numeric(input, offset) ??
-    keyword(input, offset) ??
+    equ(input, offset) ??
     identifier(input, offset)
   );
 };
